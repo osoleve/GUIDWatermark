@@ -19,8 +19,8 @@ import           Data.Maybe
 import           Data.Ord
 
 type GUID = String
-type ClientID = Integer -- ^ Int in range [0, 2^32-1]
-type WatermarkedGUID = String
+type ClientID = GUID
+type WatermarkedGUID = GUID
 type Fingerprint = String
 type PartialFingerprint = String
 
@@ -52,12 +52,11 @@ reformat guid = L.intercalate "-" spans
         , take 4 . drop 8
         , take 4 . drop 12
         , take 4 . drop 16
-        , take 4 . drop 20
-        , take 8 . drop 24
+        , take 12 . drop 20
         ]
 
 clientIDToFingerprint :: ClientID -> Fingerprint
-clientIDToFingerprint = toFullLength . concatMap show . tail . toBin
+clientIDToFingerprint = toFullLength . concatMap show . tail . toBin . hexToInteger
   where
     fullLength = guidLength * fromIntegral numPatterns
     toFullLength :: String -> String
@@ -96,7 +95,7 @@ integerToGUID x = leftPad n x'
     n = 32 - length x'
 
 fingerprintToClientID :: Fingerprint -> ClientID
-fingerprintToClientID = toDec
+fingerprintToClientID = reformat . integerToGUID . toDec
   where
     toDec :: String -> Integer
     toDec = L.foldl' (\acc x -> acc * 2 + (toInteger . digitToInt) x) 0
