@@ -1,5 +1,7 @@
 module Watermark.Utils.GUID
-    (preprocess, reformat) where
+    ( preprocess
+    , reformat
+    ) where
 
 import qualified Data.List                     as L
 

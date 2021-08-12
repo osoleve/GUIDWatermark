@@ -1,7 +1,11 @@
 {-# LANGUAGE ViewPatterns #-}
 
 module Watermark.Utils.Conversion
-    (leftPad, toBin, hexToInteger, integerToGUID) where
+    ( leftPad
+    , toBin
+    , hexToInteger
+    , integerToGUID
+    ) where
 
 import           Data.Char
 import qualified Data.List                     as L
