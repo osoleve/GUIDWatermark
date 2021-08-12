@@ -25,6 +25,8 @@ source-repository head
 library
   exposed-modules:
       Watermark
+      Watermark.Utils.Conversion
+      Watermark.Utils.GUID
   other-modules:
       Paths_Watermark
   hs-source-dirs:
