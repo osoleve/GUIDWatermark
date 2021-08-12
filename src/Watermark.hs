@@ -18,8 +18,8 @@ import qualified Data.List                     as L
 import           Data.Maybe
 import           Data.Ord
 
-import Watermark.Utils.Conversion
-import Watermark.Utils.GUID
+import           Watermark.Utils.Conversion
+import           Watermark.Utils.GUID
 
 type GUID = String
 type ClientID = GUID
@@ -31,7 +31,8 @@ guidLength = 32
 numPatterns = 4
 
 watermark :: ClientID -> GUID -> GUID
-watermark clientid (preprocess -> guid) = reformat $ zipWith processChar bitmask guid
+watermark (preprocess -> clientid) (preprocess -> guid) = reformat
+    $ zipWith processChar bitmask guid
   where
     processChar :: Char -> Char -> Char
     processChar b c | b == '0' || isDigit c = c
