@@ -12,7 +12,11 @@ import qualified Data.List                     as L
 import           Data.Maybe
 import           Data.Ord
 
+import Watermark.Utils.GUID
+
 type GUID = String
+
+guidLength = 32
 
 leftPad :: Int -> String -> String
 leftPad 0 s = s
@@ -20,7 +24,7 @@ leftPad n s = replicate n '0' ++ s
 
 toBin :: Integer -> [Int]
 toBin 0 = [0]
-toBin n = flip (++) [n' `mod` 2] $ toBin (n `div` 2) where n' = fromIntegral n
+toBin n = flip (++) [fromIntegral n `mod` 2] $ toBin (n `div` 2)
 
 hexToInteger :: String -> Integer
 hexToInteger [] = 0
@@ -43,4 +47,4 @@ integerToGUID 0 = replicate 32 '0'
 integerToGUID x = leftPad n x'
   where
     x' = integerToGUID' x
-    n  = 32 - length x'
+    n  = guidLength - length x'
