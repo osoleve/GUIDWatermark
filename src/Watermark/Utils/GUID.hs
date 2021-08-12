@@ -6,6 +6,7 @@ module Watermark.Utils.GUID
 import qualified Data.List                     as L
 
 type GUID = String
+
 -- | Remove the hyphens from a GUID
 preprocess :: GUID -> GUID
 preprocess = filter (/= '-')

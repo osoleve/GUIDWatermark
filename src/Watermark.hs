@@ -18,8 +18,8 @@ import qualified Data.List                     as L
 import           Data.Maybe
 import           Data.Ord
 
-import Watermark.Utils.Conversion
-import Watermark.Utils.GUID
+import           Watermark.Utils.Conversion
+import           Watermark.Utils.GUID
 
 type GUID = String
 type ClientID = GUID
@@ -31,7 +31,8 @@ guidLength = 32
 numPatterns = 4
 
 watermark :: ClientID -> GUID -> GUID
-watermark clientid (preprocess -> guid) = reformat $ zipWith processChar bitmask guid
+watermark (preprocess -> clientid) (preprocess -> guid) = reformat
+    $ zipWith processChar bitmask guid
   where
     processChar :: Char -> Char -> Char
     processChar b c | b == '0' || isDigit c = c
@@ -39,20 +40,6 @@ watermark clientid (preprocess -> guid) = reformat $ zipWith processChar bitmask
     fingerprint = clientIDToFingerprint clientid
     patternNum  = fromIntegral $ hexToInteger guid `mod` toInteger numPatterns
     bitmask     = take guidLength . drop (guidLength * patternNum) $ fingerprint
-
-clientIDToFingerprint :: ClientID -> Fingerprint
-clientIDToFingerprint = toFullLength . concatMap show . tail . toBin . hexToInteger
-  where
-    fullLength = guidLength * fromIntegral numPatterns
-    toFullLength :: String -> String
-    toFullLength b | length b <= fullLength = leftPad (fullLength - length b) b
-                   | otherwise              = take fullLength b
-
-fingerprintToClientID :: Fingerprint -> ClientID
-fingerprintToClientID = reformat . integerToGUID . toDec
-  where
-    toDec :: String -> Integer
-    toDec = L.foldl' (\acc x -> acc * 2 + (toInteger . digitToInt) x) 0
 
 recoverClientID :: [WatermarkedGUID] -> ClientID
 recoverClientID = fingerprintToClientID . recoverFingerprint

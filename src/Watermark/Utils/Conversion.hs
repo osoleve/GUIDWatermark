@@ -5,6 +5,8 @@ module Watermark.Utils.Conversion
     , toBin
     , hexToInteger
     , integerToGUID
+    , clientIDToFingerprint
+    , fingerprintToClientID
     ) where
 
 import           Data.Char
@@ -12,7 +14,14 @@ import qualified Data.List                     as L
 import           Data.Maybe
 import           Data.Ord
 
+import Watermark.Utils.GUID
+
 type GUID = String
+type ClientID = GUID
+type Fingerprint = String
+
+guidLength = 32
+numPatterns = 4
 
 leftPad :: Int -> String -> String
 leftPad 0 s = s
@@ -20,7 +29,7 @@ leftPad n s = replicate n '0' ++ s
 
 toBin :: Integer -> [Int]
 toBin 0 = [0]
-toBin n = flip (++) [n' `mod` 2] $ toBin (n `div` 2) where n' = fromIntegral n
+toBin n = flip (++) [fromIntegral n `mod` 2] $ toBin (n `div` 2)
 
 hexToInteger :: String -> Integer
 hexToInteger [] = 0
@@ -43,4 +52,18 @@ integerToGUID 0 = replicate 32 '0'
 integerToGUID x = leftPad n x'
   where
     x' = integerToGUID' x
-    n  = 32 - length x'
+    n  = guidLength - length x'
+
+clientIDToFingerprint :: ClientID -> Fingerprint
+clientIDToFingerprint = toFullLength . concatMap show . tail . toBin . hexToInteger
+  where
+    fullLength = guidLength * fromIntegral numPatterns
+    toFullLength :: String -> String
+    toFullLength b | length b <= fullLength = leftPad (fullLength - length b) b
+                   | otherwise              = take fullLength b
+
+fingerprintToClientID :: Fingerprint -> ClientID
+fingerprintToClientID = reformat . integerToGUID . toDec
+  where
+    toDec :: String -> Integer
+    toDec = L.foldl' (\acc x -> acc * 2 + (toInteger . digitToInt) x) 0
