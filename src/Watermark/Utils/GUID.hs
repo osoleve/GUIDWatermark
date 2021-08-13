@@ -1,11 +1,16 @@
 module Watermark.Utils.GUID
     ( preprocess
     , reformat
+    , GUID
+    , guidLength
     ) where
 
 import qualified Data.List                     as L
 
 type GUID = String
+
+guidLength :: Int
+guidLength = 32
 
 -- | Remove the hyphens from a GUID
 preprocess :: GUID -> GUID

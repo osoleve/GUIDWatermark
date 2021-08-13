@@ -4,7 +4,7 @@ Proof of concept for discreetly watermarking a database extract for distribution
 For educational purposes only. If you want to use this in production, please contact me first so I can talk you out of it.
 
 ```haskell
- > import Watermark
+> import Watermark
 
 > guids = ["26CCDA16-1077-FB69-720B-2154ABB48E98"
           ,"9FF085EC-DA5D-2ECF-532F-AEEA0974AEEB"
@@ -18,10 +18,10 @@ For educational purposes only. If you want to use this in production, please con
           ,"D66C25C8-4F7B-6D12-DACE-ACCA08843379"]
 guids :: [[Char]]
 
-> clientIDGUID = "A0562609-1AF7-DD39-A2B4-35E71B3A14BC"
-clientIDGUID :: [Char]
+> clientGUID = "A0562609-1AF7-DD39-A2B4-35E71B3A14BC"
+clientGUID :: [Char]
 
-> map (watermark clientIDGUID) guids
+> map (watermark clientGUID) guids
 ["26cCDA16-1077-Fb69-720B-2154ABB48E98"
 ,"9FF085ec-DA5d-2EcF-532f-AeEA0974aeEB"
 ,"e6a93E8C-580a-6aAB-A46f-28566544F8ba"
