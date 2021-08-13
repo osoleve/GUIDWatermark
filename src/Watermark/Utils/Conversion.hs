@@ -23,6 +23,8 @@ type Fingerprint = String
 guidLength = 32
 numPatterns = 4
 
+guidLength = 32
+
 leftPad :: Int -> String -> String
 leftPad 0 s = s
 leftPad n s = replicate n '0' ++ s
