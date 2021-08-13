@@ -41,20 +41,6 @@ watermark (preprocess -> clientid) (preprocess -> guid) = reformat
     patternNum  = fromIntegral $ hexToInteger guid `mod` toInteger numPatterns
     bitmask     = take guidLength . drop (guidLength * patternNum) $ fingerprint
 
-clientIDToFingerprint :: ClientID -> Fingerprint
-clientIDToFingerprint = toFullLength . concatMap show . tail . toBin . hexToInteger
-  where
-    fullLength = guidLength * fromIntegral numPatterns
-    toFullLength :: String -> String
-    toFullLength b | length b <= fullLength = leftPad (fullLength - length b) b
-                   | otherwise              = take fullLength b
-
-fingerprintToClientID :: Fingerprint -> ClientID
-fingerprintToClientID = reformat . integerToGUID . toDec
-  where
-    toDec :: String -> Integer
-    toDec = L.foldl' (\acc x -> acc * 2 + (toInteger . digitToInt) x) 0
-
 recoverClientID :: [WatermarkedGUID] -> ClientID
 recoverClientID = fingerprintToClientID . recoverFingerprint
 
