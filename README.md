@@ -1,5 +1,5 @@
 # Watermark
-Proof of concept for discreetly watermarking a database extract for distribution to unsecured third parties, supporting up to 2^128 recipients. Requires on average >20,000 GUIDs to work properly, but a weaker version not published here can work with fewer.
+Proof of concept for discreetly watermarking a database extract for distribution to unsecured third parties, supporting up to 2^128 recipients.
 
 For educational purposes only. If you want to use this in production, please contact me first so I can talk you out of it.
 
